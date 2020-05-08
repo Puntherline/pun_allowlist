@@ -1,22 +1,14 @@
 # Features:
 
-• Whitelist only mode:
-- Users on the whitelist can join.
-- Users not on the whitelist can't join.
+• Whitelist only mode (You have to be whitelisted, no password prompt)
 
-• Password only mode:
-- Users knowing the password can join.
-- Users not knowing the password can't join.
+• Password only mode (You have to know the password, no whitelist check)
 
-• Whitelist and password mode:
-- Users not on the whitelist can't join.
-- Users on the whitelist will be asked for the password.
+• Whitelist and password mode (You have to be whitelisted and know the password)
 
-• CleverMode:
-- Users on the whitelist automatically skip the password.
-- Users not on the whitelist will be asked for the password.
+• Clever mode (If you're whitelisted, you're not asked for a password. If you're not whitelisted, you're asked for one.)
 
-• Easy to configure (password, attempts, Discord link shown on refused connection).
+• Easy to configure (password, attempts, Discord link shown on refused connection)
 
 • Shows user all of his/her identifiers and a link upon refused connection to easily copy/paste identifiers.
 
