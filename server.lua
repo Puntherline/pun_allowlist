@@ -172,7 +172,7 @@ function showPasswordCard(deferrals, callback, showError, numAttempts)
         if numAttempts <= 1 then
             card.body[1].items[3].items[1].text = 'Error: Invalid password entered! ('..(Config.Attempts - numAttempts)..' attempt remaining!)'
         else
-            card.body[1].items[3].items[1].text = 'Error: Invalid password entered! ('..(Config.Attempts - numAttempts)..' attempt remaining!)'
+            card.body[1].items[3].items[1].text = 'Error: Invalid password entered! ('..(Config.Attempts - numAttempts)..' attempts remaining!)'
         end
     end
     deferrals.presentCard(card, callback)
