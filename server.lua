@@ -42,7 +42,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     -- Stopping user from joining
     deferrals.defer()
     deferrals.update('Please wait...')
-    Wait(0)
+    Wait(200)
 
     -- Whitelist only
     if Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
