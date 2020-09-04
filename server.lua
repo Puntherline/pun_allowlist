@@ -41,8 +41,9 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 
     -- Stopping user from joining
     deferrals.defer()
+    Wait(100) -- May be tweaked, seems to cause issues closer to 0 on some servers.
     deferrals.update('Please wait...')
-    Wait(200)
+    Wait(100) -- May be tweaked, seems to cause issues closer to 0 on some servers.
 
     -- Whitelist only
     if Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
