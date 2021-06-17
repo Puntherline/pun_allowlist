@@ -12,6 +12,7 @@ Config.Password     = 'password'                   -- Password
 Config.Attempts     = 3                            -- How many attempts a user has to enter the correct password
 Config.CleverMode   = true                         -- Use clever mode? If this is true, you will have to either be whitelisted *or* know the password. Recommended.
 Config.DiscordLink  = 'https://discord.gg/4QMdYMX' -- Your Discord server invite link.
+Config.DeferralWait = 0.5                          -- Wait X amount of seconds before executing the next deferral. Increase for stability.
 Config.Whitelist    = {                            -- You normally only need one identifier per person.
     'steam:11000010a2324b4',                               -- Puntherline: Steam
     'license:145ebc08c3ab10a72172c4e98483a4329a3f876e',    -- Puntherline: FiveM
@@ -24,6 +25,7 @@ Config.Whitelist    = {                            -- You normally only need one
 
 
 -- Globals
+local lastDeferral = {}
 local attempts = {}
 local passwordCard = {["type"]="AdaptiveCard",["minHeight"]="100px",["body"]={{["type"]="Container",["items"]={{["type"]="TextBlock",["horizontalAlignment"]="Left",["text"]="Password",},{["type"]="Input.Text",["id"]="password",["placeholder"]="Enter Password"},{["type"]="Container",["isVisible"]=false,["items"]={{["type"]="TextBlock",["weight"]="Bolder",["color"]="Attention",["text"]="Error: Invalid password entered!"}}}}}},["actions"]={{["type"]="Action.Submit",["title"]="Enter"}},["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",["version"]="1.2"}
 
@@ -31,6 +33,7 @@ local passwordCard = {["type"]="AdaptiveCard",["minHeight"]="100px",["body"]={{[
 
 -- Main logic. Too lazy to make it more efficient and I'm certainly not going to change code that already works.
 AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
+
     -- Locals
     local player = source
     local identifiers = GetPlayerIdentifiers(player)
@@ -41,9 +44,13 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 
     -- Stopping user from joining
     deferrals.defer()
-    Wait(100) -- May be tweaked, seems to cause issues closer to 0 on some servers.
+    lastDeferral["id" .. player] = os.clock()
+
+    while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+        Citizen.Wait(10)
+    end
     deferrals.update('Please wait...')
-    Wait(100) -- May be tweaked, seems to cause issues closer to 0 on some servers.
+    lastDeferral["id" .. player] = os.clock()
 
     -- Whitelist only
     if Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
@@ -57,11 +64,17 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         end
 
         if allowed then
+            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                Citizen.Wait(10)
+            end
             deferrals.done()
         else
             for k1, v in pairs(identifiers) do
                 oldInfo = newInfo
                 newInfo = string.format("%s\n%s", oldInfo, v)
+            end
+            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                Citizen.Wait(10)
             end
             deferrals.done('You\'re not whitelisted. To get whitelisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
         end
@@ -88,15 +101,21 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                 end
 
                 if attempts[player] < Config.Attempts then
-                    showPasswordCard(deferrals, passwordCardCallback, true, attempts[player])
+                    showPasswordCard(player, deferrals, passwordCardCallback, true, attempts[player])
                 else
+                    while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                        Citizen.Wait(10)
+                    end
                     deferrals.done('You failed '..Config.Attempts..' times, please try again.')
                 end
             else
+                while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                    Citizen.Wait(10)
+                end
                 deferrals.done()
             end
         end
-        showPasswordCard(deferrals, passwordCardCallback)
+        showPasswordCard(player, deferrals, passwordCardCallback)
     end
 
     -- Whitelist and Password or CleverMode
@@ -111,6 +130,9 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         end
 
         if Config.CleverMode and allowed then
+            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                Citizen.Wait(10)
+            end
             deferrals.done()
         elseif (not Config.CleverMode and allowed) or (Config.CleverMode and not allowed) then
             local function passwordCardCallback(data, rawData)
@@ -132,33 +154,48 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                     end
     
                     if attempts[player] < Config.Attempts then
-                        showPasswordCard(deferrals, passwordCardCallback, true, attempts[player])
+                        showPasswordCard(player, deferrals, passwordCardCallback, true, attempts[player])
                     else
                         if not Config.CleverMode then
+                            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                                Citizen.Wait(10)
+                            end
                             deferrals.done('You failed '..Config.Attempts..' times, please try again.')
                         elseif Config.CleverMode then
                             for k1, v in pairs(identifiers) do
                                 oldInfo = newInfo
                                 newInfo = string.format("%s\n%s", oldInfo, v)
                             end
+                            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                                Citizen.Wait(10)
+                            end
                             deferrals.done('You\'re not whitelisted and got the password wrong '..Config.Attempts..' times. To bypass the password you need to get whitelisted over at our Discord server '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
                         end
                     end
                 else
+                    while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                        Citizen.Wait(10)
+                    end
                     deferrals.done()
                 end
             end
-            showPasswordCard(deferrals, passwordCardCallback)
+            showPasswordCard(player, deferrals, passwordCardCallback)
         elseif not allowed then -- not allowed, refuse connection
             for k1, v in pairs(identifiers) do
                 oldInfo = newInfo
                 newInfo = string.format("%s\n%s", oldInfo, v)
+            end
+            while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+                Citizen.Wait(10)
             end
             deferrals.done('You\'re not whitelisted. To get whitelisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
         end
     end
 
     if not Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
+        while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+            Citizen.Wait(10)
+        end
         deferrals.done()
     end
 end)
@@ -166,7 +203,7 @@ end)
 
 
 -- Function to show the password card
-function showPasswordCard(deferrals, callback, showError, numAttempts)
+function showPasswordCard(player, deferrals, callback, showError, numAttempts)
     local card = passwordCard
     card.body[1].items[3].isVisible = showError and true or false
     if showError and numAttempts then
@@ -176,5 +213,9 @@ function showPasswordCard(deferrals, callback, showError, numAttempts)
             card.body[1].items[3].items[1].text = 'Error: Invalid password entered! ('..(Config.Attempts - numAttempts)..' attempts remaining!)'
         end
     end
+    while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
+        Citizen.Wait(10)
+    end
     deferrals.presentCard(card, callback)
+    lastDeferral["id" .. player] = os.clock()
 end
