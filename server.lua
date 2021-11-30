@@ -6,14 +6,14 @@
 
 -- Config
 Config = {}
-Config.UseWhitelist = false                        -- Use whitelist? Only people that are whitelisted are allowed to join.
-Config.UsePassword  = false                        -- Use password? If whitelist and password are true, you have to be whitelisted and know the password.
+Config.UseAllowlist = false                        -- Use allowlist? Only people that are allowlisted are allowed to join.
+Config.UsePassword  = false                        -- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
 Config.Password     = 'password'                   -- Password
 Config.Attempts     = 3                            -- How many attempts a user has to enter the correct password
-Config.CleverMode   = true                         -- Use clever mode? If this is true, you will have to either be whitelisted *or* know the password. Recommended.
+Config.CleverMode   = true                         -- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
 Config.DiscordLink  = 'https://discord.gg/4QMdYMX' -- Your Discord server invite link.
 Config.DeferralWait = 0.5                          -- Wait X amount of seconds before executing the next deferral. Increase for stability.
-Config.Whitelist    = {                            -- You normally only need one identifier per person.
+Config.Allowlist    = {                            -- You normally only need one identifier per person.
     'steam:11000010a2324b4',                               -- Puntherline: Steam
     'license:145ebc08c3ab10a72172c4e98483a4329a3f876e',    -- Puntherline: FiveM
     'xbl:2535410249652434',                                -- Puntherline: Xbox Live
@@ -52,10 +52,10 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     deferrals.update('Please wait...')
     lastDeferral["id" .. player] = os.clock()
 
-    -- Whitelist only
-    if Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
+    -- Allowlist only
+    if Config.UseAllowlist and not Config.UsePassword and not Config.CleverMode then
         for k1, v in pairs(identifiers) do
-            for k2, i in ipairs(Config.Whitelist) do
+            for k2, i in ipairs(Config.Allowlist) do
                 if string.match(v, i) then
                     allowed = true
                     break
@@ -76,12 +76,12 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
             while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
                 Citizen.Wait(10)
             end
-            deferrals.done('You\'re not whitelisted. To get whitelisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
+            deferrals.done('You\'re not allowlisted. To get allowlisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
         end
     end
 
     -- Password only
-    if not Config.UseWhitelist and Config.UsePassword and not Config.CleverMode then
+    if not Config.UseAllowlist and Config.UsePassword and not Config.CleverMode then
         local function passwordCardCallback(data, rawData)
             local match = false
 
@@ -118,10 +118,10 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         showPasswordCard(player, deferrals, passwordCardCallback)
     end
 
-    -- Whitelist and Password or CleverMode
-    if (Config.UseWhitelist and Config.UsePassword) or Config.CleverMode then
+    -- Allowlist and Password or CleverMode
+    if (Config.UseAllowlist and Config.UsePassword) or Config.CleverMode then
         for k1, v in pairs(identifiers) do
-            for k2, i in ipairs(Config.Whitelist) do
+            for k2, i in ipairs(Config.Allowlist) do
                 if string.match(v, i) then
                     allowed = true
                     break
@@ -169,7 +169,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
                             while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
                                 Citizen.Wait(10)
                             end
-                            deferrals.done('You\'re not whitelisted and got the password wrong '..Config.Attempts..' times. To bypass the password you need to get whitelisted over at our Discord server '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
+                            deferrals.done('You\'re not allowlisted and got the password wrong '..Config.Attempts..' times. To bypass the password you need to get allowlisted over at our Discord server '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
                         end
                     end
                 else
@@ -188,11 +188,11 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
             while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
                 Citizen.Wait(10)
             end
-            deferrals.done('You\'re not whitelisted. To get whitelisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
+            deferrals.done('You\'re not allowlisted. To get allowlisted join our Discord server at '..Config.DiscordLink..' and provide us this info:\n'..newInfo)
         end
     end
 
-    if not Config.UseWhitelist and not Config.UsePassword and not Config.CleverMode then
+    if not Config.UseAllowlist and not Config.UsePassword and not Config.CleverMode then
         while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
             Citizen.Wait(10)
         end
