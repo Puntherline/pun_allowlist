@@ -1,12 +1,12 @@
 # Features:
 
-• Whitelist only mode (You have to be whitelisted, no password prompt)
+• Allowlist only mode (You have to be allowlisted, no password prompt)
 
-• Password only mode (You have to know the password, no whitelist check)
+• Password only mode (You have to know the password, no allowlist check)
 
-• Whitelist and password mode (You have to be whitelisted and know the password)
+• Allowlist and password mode (You have to be allowlisted and know the password)
 
-• Clever mode (If you're whitelisted, you're not asked for a password. If you're not whitelisted, you're asked for one.)
+• Clever mode (If you're allowlisted, you're not asked for a password. If you're not allowlisted, you're asked for one.)
 
 • Easy to configure (password, attempts, Discord link shown on refused connection)
 
@@ -20,9 +20,9 @@
 
 • Put it into `resources`.
 
-• Add `start pun_whitelist` to your server.cfg file.
+• Add `start pun_allowlist` to your server.cfg file.
 
-• Start the server. If it's already up just type `refresh` followed by `start pun_whitelist` into the server or client console.
+• Start the server. If it's already up just type `refresh` followed by `start pun_allowlist` into the server or client console.
 
 
 
