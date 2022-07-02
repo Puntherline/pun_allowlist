@@ -13,7 +13,6 @@ Config.Attempts		= 3									-- How many attempts a user has to enter the correc
 Config.CleverMode	= true								-- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
 Config.DiscordLink	= "https://discord.gg/your_link"	-- Your Discord server invite link.
 Config.DeferralWait	= 0.5								-- Wait x seconds between deferrals. Do not set too low or people wont be able to join.
-Config.BlockSeconds	= 60								-- When someone gets the password wrong 3 times, they'll be blocked for x seconds.
 Config.Allowlist	= {									-- You normally only need one identifier per person.
 	"steam:000000000000000",
 	"license:0000000000000000000000000000000000000000",
