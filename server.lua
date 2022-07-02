@@ -6,15 +6,15 @@
 
 -- Config
 Config = {}
-Config.UseAllowlist	= false					-- Use allowlist? Only people that are allowlisted are allowed to join.
-Config.UsePassword	= false					-- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
-Config.Password		= "password"			-- Password
-Config.Attempts		= 3						-- How many attempts a user has to enter the correct password
-Config.CleverMode	= true					-- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
-Config.DiscordLink	= "https://discord.gg/"	-- Your Discord server invite link.
-Config.DeferralWait	= 0.5					-- Wait x seconds between deferrals. Do not set too low or people wont be able to join.
-Config.BlockSeconds	= 60					-- When someone gets the password wrong 3 times, they'll be blocked for x seconds.
-Config.Allowlist	= {						-- You normally only need one identifier per person.
+Config.UseAllowlist	= false								-- Use allowlist? Only people that are allowlisted are allowed to join.
+Config.UsePassword	= true								-- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
+Config.Password		= "password"						-- Password
+Config.Attempts		= 3									-- How many attempts a user has to enter the correct password
+Config.CleverMode	= false								-- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
+Config.DiscordLink	= "https://discord.gg/your_link"	-- Your Discord server invite link.
+Config.DeferralWait	= 0.5								-- Wait x seconds between deferrals. Do not set too low or people wont be able to join.
+Config.BlockSeconds	= 60								-- When someone gets the password wrong 3 times, they'll be blocked for x seconds.
+Config.Allowlist	= {									-- You normally only need one identifier per person.
 	"steam:000000000000000",
 	"license:0000000000000000000000000000000000000000",
 	"xbl:0000000000000000",
@@ -28,7 +28,7 @@ Config.Allowlist	= {						-- You normally only need one identifier per person.
 -- Globals
 local lastDeferral = {}
 local attempts = {}
-local passwordCard = {["type"]="AdaptiveCard",["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",["version"]="1.5",["body"]={{["type"]="Container",["items"]={{["type"]="TextBlock",["text"]="Password",["wrap"]=true},{["type"]="Input.Text",["placeholder"]="Enter Password",["style"]="Password"},{["type"]="Container",["isVisible"]=false,["items"]={{["type"]="TextBlock",["text"]="Error=Invalid password entered!",["wrap"]=true,["weight"]="Bolder"}}}}},{["type"]="ActionSet",["actions"]={{["type"]="Action.Submit",["title"]="Enter"}}}}}
+local passwordCard = {["type"]="AdaptiveCard",["$schema"]="http://adaptivecards.io/schemas/adaptive-card.json",["version"]="1.5",["body"]={{["type"]="Container",["items"]={{["type"]="TextBlock",["text"]="Password",["wrap"]=true},{["type"]="Input.Text",["placeholder"]="Enter Password",["style"]="Password",["id"]="password"},{["type"]="Container",["isVisible"]=false,["items"]={{["type"]="TextBlock",["text"]="Error=Invalid password entered!",["wrap"]=true,["weight"]="Bolder"}}}}},{["type"]="ActionSet",["actions"]={{["type"]="Action.Submit",["title"]="Enter"}}}}}
 
 
 
