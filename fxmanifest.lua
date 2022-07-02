@@ -1,8 +1,8 @@
-fx_version 'cerulean'
-game 'gta5'
+fx_version "cerulean"
+game "gta5"
 
-author 'Puntherline'
-description 'Advanced allowlist / password script.'
-version '1.1'
+author "Puntherline"
+description "Allowlist/Password script without SQL"
+version "1.2"
 
-server_script 'server.lua'
+server_script "server.lua"
