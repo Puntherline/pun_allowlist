@@ -7,10 +7,10 @@
 -- Config
 Config = {}
 Config.UseAllowlist	= false								-- Use allowlist? Only people that are allowlisted are allowed to join.
-Config.UsePassword	= true								-- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
+Config.UsePassword	= false								-- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
 Config.Password		= "password"						-- Password
 Config.Attempts		= 3									-- How many attempts a user has to enter the correct password
-Config.CleverMode	= false								-- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
+Config.CleverMode	= true								-- Use clever mode? If this is true, you will have to either be allowlisted *or* know the password. Recommended.
 Config.DiscordLink	= "https://discord.gg/your_link"	-- Your Discord server invite link.
 Config.DeferralWait	= 0.5								-- Wait x seconds between deferrals. Do not set too low or people wont be able to join.
 Config.BlockSeconds	= 60								-- When someone gets the password wrong 3 times, they'll be blocked for x seconds.
