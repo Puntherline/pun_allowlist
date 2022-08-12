@@ -6,6 +6,7 @@
 
 -- Config
 Config = {}
+Config.ConnectQueue = false								-- Using ConnectQueue? (https://github.com/Nick78111/ConnectQueue)
 Config.UseAllowlist	= false								-- Use allowlist? Only people that are allowlisted are allowed to join.
 Config.UsePassword	= false								-- Use password? If allowlist and password are true, you have to be allowlisted and know the password.
 Config.Password		= "password"						-- Password
@@ -73,7 +74,11 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 			while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
 				Citizen.Wait(10)
 			end
-			deferrals.done()
+			if Config.ConnectQueue then
+				TriggerEvent("pun_allowlist:playerConnecting", player, name, setKickReason, deferrals)
+			else
+				deferrals.done()
+			end
 		else
 			for k1, v in pairs(identifiers) do
 				oldInfo = newInfo
@@ -118,7 +123,11 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 				while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
 					Citizen.Wait(10)
 				end
-				deferrals.done()
+				if Config.ConnectQueue then
+					TriggerEvent("pun_allowlist:playerConnecting", player, name, setKickReason, deferrals)
+				else
+					deferrals.done()
+				end
 			end
 		end
 		showPasswordCard(player, deferrals, passwordCardCallback)
@@ -139,7 +148,11 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 			while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
 				Citizen.Wait(10)
 			end
-			deferrals.done()
+			if Config.ConnectQueue then
+				TriggerEvent("pun_allowlist:playerConnecting", player, name, setKickReason, deferrals)
+			else
+				deferrals.done()
+			end
 		elseif (not Config.CleverMode and allowed) or (Config.CleverMode and not allowed) then
 			local function passwordCardCallback(data, rawData)
 				local match = false
@@ -182,7 +195,11 @@ AddEventHandler("playerConnecting", function(name, setKickReason, deferrals)
 					while lastDeferral["id" .. player] + Config.DeferralWait > os.clock() do
 						Citizen.Wait(10)
 					end
-					deferrals.done()
+					if Config.ConnectQueue then
+						TriggerEvent("pun_allowlist:playerConnecting", player, name, setKickReason, deferrals)
+					else
+						deferrals.done()
+					end
 				end
 			end
 			showPasswordCard(player, deferrals, passwordCardCallback)
